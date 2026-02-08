@@ -38,3 +38,18 @@ frontend/.next/
 frontend/node_modules/
 frontend/.env
 frontend/.env.local
+
+#3D Render Animation
+Audio-Speech-To-Sign-Language-Converter/assets/
+
+# ML / Model files
+*.h5
+*.task
+
+# IDE
+.idea/
+
+# Docs & presentations
+*.pptx
+*.pdf
+*.docx

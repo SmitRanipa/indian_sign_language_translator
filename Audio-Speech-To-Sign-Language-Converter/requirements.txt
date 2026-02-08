@@ -1,0 +1,17 @@
+asgiref
+click
+Django>=4.1.9
+joblib
+nltk==3.7
+regex
+sqlparse>=0.4.4
+tqdm
+setuptools
+numpy
+opencv-python
+keras
+tensorflow
+mediapipe
+pyttsx3
+pyenchant
+Pillow

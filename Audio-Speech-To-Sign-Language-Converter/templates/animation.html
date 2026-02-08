@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Translator | Indian Sign Language Translator{% endblock %}
+
+{% block content %}
+<style>
+	.translator-container {
+		padding: 40px 20px;
+		max-width: 1200px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 30px;
+	}
+
+	.card {
+		background: var(--card-bg);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border: 1px solid var(--glass-border);
+		border-radius: 20px;
+		padding: 30px;
+		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+	}
+
+	.card h2 {
+		margin-bottom: 25px;
+		font-size: 1.5rem;
+		color: var(--accent-color);
+		text-align: center;
+	}
+
+	/* Form Styles */
+	.input-group {
+		display: flex;
+		gap: 10px;
+		margin-bottom: 20px;
+	}
+
+	.mytext {
+		flex: 1;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--glass-border);
+		border-radius: 10px;
+		padding: 12px 15px;
+		color: var(--text-color);
+		font-size: 1rem;
+		outline: none;
+		transition: var(--transition-speed);
+	}
+
+	.mytext:focus {
+		border-color: var(--accent-color);
+		background: rgba(255, 255, 255, 0.1);
+	}
+
+	.btn-icon {
+		background: var(--accent-color);
+		color: white;
+		border: none;
+		border-radius: 10px;
+		width: 45px;
+		height: 45px;
+		cursor: pointer;
+		transition: var(--transition-speed);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.btn-icon:hover {
+		transform: scale(1.05);
+		box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+	}
+
+	.btn-submit {
+		background: var(--accent-color);
+		color: white;
+		border: none;
+		border-radius: 10px;
+		padding: 10px 25px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: var(--transition-speed);
+	}
+
+	.btn-submit:hover {
+		opacity: 0.9;
+		transform: translateY(-2px);
+	}
+
+	/* Results Table-like styles */
+	.results-area {
+		margin-top: 25px;
+		border-top: 1px solid var(--glass-border);
+		padding-top: 20px;
+	}
+
+	.result-item {
+		margin-bottom: 15px;
+	}
+
+	.result-label {
+		font-weight: 600;
+		color: var(--accent-color);
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.result-value {
+		font-size: 1.1rem;
+		margin-top: 5px;
+	}
+
+	#list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		padding: 0;
+		margin-top: 10px;
+	}
+
+	#list li {
+		background: rgba(255, 255, 255, 0.1);
+		padding: 5px 15px;
+		border-radius: 15px;
+		font-size: 0.9rem;
+		transition: var(--transition-speed);
+	}
+
+	/* Video Player Styles */
+	.video-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 20px;
+	}
+
+	#videoPlayer {
+		width: 100%;
+		border-radius: 15px;
+		overflow: hidden;
+		border: 2px solid var(--glass-border);
+		background: #000;
+	}
+
+	.video-controls {
+		display: flex;
+		gap: 15px;
+	}
+
+	.btn-play {
+		background: transparent;
+		border: 2px solid var(--accent-color);
+		color: var(--accent-color);
+		padding: 10px 30px;
+		border-radius: 25px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: var(--transition-speed);
+	}
+
+	.btn-play:hover {
+		background: var(--accent-color);
+		color: white;
+	}
+
+	@media (max-width: 768px) {
+		.translator-container {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+<div class="translator-container">
+	<!-- Input Card -->
+	<div class="card">
+		<h2><i class="fas fa-keyboard"></i> Input</h2>
+		<form action="" method="post">
+			{% csrf_token %}
+			<div class="input-group">
+				<input type="text" name="sen" class="mytext" id="speechToText" placeholder="Type a sentence here...">
+				<button type="button" class="btn-icon" onclick="record()" title="Record Speech">
+					<i class="fas fa-microphone"></i>
+				</button>
+			</div>
+			<div style="text-align: right;">
+				<button type="submit" class="btn-submit">Translate <i class="fas fa-arrow-right"></i></button>
+			</div>
+		</form>
+
+		<div class="results-area">
+			<div class="result-item">
+				<div class="result-label">Entered Text</div>
+				<div class="result-value">{{ text|default:"Waiting for input..." }}</div>
+			</div>
+			<div class="result-item">
+				<div class="result-label">Keywords Identified</div>
+				<ul id="list">
+					{% for word in words %}
+					<li>{{ word }}</li>
+					{% empty %}
+					<li style="background: transparent; padding: 0; opacity: 0.5;">No keywords yet.</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- Output Card -->
+	<div class="card">
+		<h2><i class="fas fa-play-circle"></i> ISL Animation</h2>
+		<div class="video-container">
+			<video id="videoPlayer" preload="auto" autoplay>
+				<source src="" type="video/mp4">
+				Your browser does not support HTML5 video.
+			</video>
+			<div class="video-controls">
+				<button class="btn-play" onclick="playPause()">
+					<i class="fas fa-play" id="playIcon"></i> Play / Pause
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function record() {
+		var recognition = new webkitSpeechRecognition();
+		recognition.lang = 'en-IN';
+		recognition.onresult = function (event) {
+			document.getElementById('speechToText').value = event.results[0][0].transcript;
+		}
+		recognition.start();
+	}
+
+	function play() {
+		var videoSource = new Array();
+		var videos = document.getElementById("list").getElementsByTagName("li");
+
+		if (videos.length === 0 || videos[0].innerText.includes("No keywords")) return;
+
+		for (var j = 0; j < videos.length; j++) {
+			videoSource[j] = "/static/" + videos[j].innerHTML + ".mp4";
+		}
+
+		var i = 0;
+		var videoCount = videoSource.length;
+
+		function videoPlay(videoNum) {
+			const currentItem = document.getElementById("list").getElementsByTagName("li")[videoNum];
+			if (currentItem) {
+				currentItem.style.background = "var(--accent-color)";
+				currentItem.style.color = "white";
+				currentItem.style.transform = "scale(1.1)";
+			}
+			document.getElementById("videoPlayer").setAttribute("src", videoSource[videoNum]);
+			document.getElementById("videoPlayer").load();
+			document.getElementById("videoPlayer").play();
+			updatePlayIcon(true);
+		}
+
+		document.getElementById('videoPlayer').addEventListener('ended', myHandler, false);
+		videoPlay(0);
+
+		function myHandler() {
+			const prevItem = document.getElementById("list").getElementsByTagName("li")[i];
+			if (prevItem) {
+				prevItem.style.background = "rgba(255, 255, 255, 0.1)";
+				prevItem.style.color = "var(--text-color)";
+				prevItem.style.transform = "scale(1)";
+			}
+			i++;
+			if (i == videoCount) {
+				document.getElementById("videoPlayer").pause();
+				updatePlayIcon(false);
+			} else {
+				videoPlay(i);
+			}
+		}
+	}
+
+	function playPause() {
+		const video = document.getElementById("videoPlayer");
+		if (video.paused) {
+			if (!video.src || video.src.includes(window.location.href)) {
+				play();
+			} else {
+				video.play();
+				updatePlayIcon(true);
+			}
+		} else {
+			video.pause();
+			updatePlayIcon(false);
+		}
+	}
+
+	function updatePlayIcon(isPlaying) {
+		const icon = document.getElementById("playIcon");
+		if (isPlaying) {
+			icon.classList.replace('fa-play', 'fa-pause');
+		} else {
+			icon.classList.replace('fa-pause', 'fa-play');
+		}
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Project Specific
+backend/data/
+backend/model/
+backend/dataset/
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+
+#3D Render Animation
+Audio-Speech-To-Sign-Language-Converter/assets/

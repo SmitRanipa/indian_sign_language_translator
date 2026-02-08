@@ -1,0 +1,305 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Indian Sign Language Translator{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --navbar-bg: rgba(15, 23, 42, 0.7);
+            --accent-color: #38bdf8;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --footer-bg: #020617;
+            --transition-speed: 0.3s;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --navbar-bg: rgba(248, 250, 252, 0.7);
+            --accent-color: #0ea5e9;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --footer-bg: #e2e8f0;
+            --glass-border: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styles */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: var(--transition-speed);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .nav-links li a:hover {
+            color: var(--accent-color);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .nav-links li a.active {
+            color: var(--accent-color);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition-speed);
+        }
+
+        #theme-toggle:hover {
+            color: var(--accent-color);
+            transform: rotate(20deg);
+        }
+
+        /* Hero & Content Wrapper */
+        .wrapper {
+            flex: 1;
+            padding-top: 100px; /* Space for fixed navbar */
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--text-color);
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            transition: var(--transition-speed);
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                width: 95%;
+                padding: 10px 20px;
+            }
+            .nav-links {
+                display: none; /* Mobile menu can be added later */
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 10px;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}" class="logo">
+            <i class="fas fa-sign-language"></i>
+            ISL Translator
+        </a>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}" id="nav-home">Home</a></li>
+            <li><a href="{% url 'animation' %}" id="nav-convertor">Convertor</a></li>
+            <li><a href="{% url 'gesture' %}" id="nav-gesture">Gesture to Text</a></li>
+            <li><a href="{% url 'about' %}" id="nav-about">About</a></li>
+            <li><a href="{% url 'contact' %}" id="nav-contact">Contact</a></li>
+        </ul>
+        <div class="controls">
+            <button id="theme-toggle" title="Toggle Light/Dark Mode">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+            <a href="{% url 'admin:index' %}" style="color: var(--text-color); font-size: 1.1rem;" title="Admin Panel"><i class="fas fa-user-shield"></i></a>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>ISL Translator</h3>
+                <p>Bridging the communication gap between the hearing-impaired and the hearing community through advanced AI & 3D animation technology.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul style="list-style: none;">
+                    <li><a href="{% url 'home' %}" style="color: var(--text-color); text-decoration: none; opacity: 0.8;">Home</a></li>
+                    <li><a href="{% url 'animation' %}" style="color: var(--text-color); text-decoration: none; opacity: 0.8;">Convertor</a></li>
+                    <li><a href="{% url 'about' %}" style="color: var(--text-color); text-decoration: none; opacity: 0.8;">About Us</a></li>
+                    <li><a href="{% url 'contact' %}" style="color: var(--text-color); text-decoration: none; opacity: 0.8;">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> contact@isl-translator.com</p>
+                <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                <p><i class="fas fa-map-marker-alt"></i> India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Indian Sign Language Translator. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            } else {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        // Highlight active nav link
+        const currentPath = window.location.pathname;
+        if (currentPath === '/') document.getElementById('nav-home').classList.add('active');
+        else if (currentPath.includes('animation')) document.getElementById('nav-convertor').classList.add('active');
+        else if (currentPath.includes('about')) document.getElementById('nav-about').classList.add('active');
+        else if (currentPath.includes('contact')) document.getElementById('nav-contact').classList.add('active');
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

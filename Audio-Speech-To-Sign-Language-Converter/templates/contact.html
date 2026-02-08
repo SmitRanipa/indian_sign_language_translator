@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | Indian Sign Language Translator{% endblock %}
+
+{% block content %}
+<style>
+    .contact-container {
+        padding: 60px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .contact-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .contact-card h1 {
+        color: var(--accent-color);
+        margin-bottom: 30px;
+    }
+
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.2rem;
+    }
+
+    .info-item i {
+        color: var(--accent-color);
+        width: 30px;
+    }
+</style>
+
+<div class="contact-container">
+    <div class="contact-card">
+        <h1>Contact Us</h1>
+        <p>For any queries regarding this project, feel free to reach out to us.</p>
+
+        <div class="contact-info">
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <span>ranipasmeet@gmail.com</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Gujarat, India</span>
+            </div>
+        </div>
+
+        <p style="margin-top: 40px; opacity: 0.7;">Version 1.0.0</p>
+    </div>
+</div>
+{% endblock %}
